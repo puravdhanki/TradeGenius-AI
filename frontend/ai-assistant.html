@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant - TradeGenius AI</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-brand">
+                <span class="logo-icon">📊</span>
+                <span class="logo-text">TradeGenius AI</span>
+            </a>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="navbar-menu" id="navbarMenu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="charts.html" class="nav-link">Live Charts</a></li>
+                <li><a href="ai-assistant.html" class="nav-link active">AI Assistant</a></li>
+                <li><a href="admin.html" class="nav-link">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="ai-assistant-container">
+        <div class="container">
+            <div class="chat-layout">
+                <div class="chat-main">
+                    <div class="chat-header">
+                        <div class="chat-title">
+                            <i class="fas fa-robot"></i>
+                            TradeGenius AI Assistant
+                        </div>
+                        <div class="chat-status">
+                            <span class="status-dot"></span>
+                            <span id="connectionStatus">Checking connection...</span>
+                        </div>
+                    </div>
+
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message ai">
+                            <div class="message-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="message-content">
+                                <div>
+                                    Namaste! 🙏 Main TradeGenius AI hoon. Main aapki stock trading mein madad karunga.
+                                    <br><br>
+                                    Aap mujhse kuch bhi puch sakte hain:
+                                    <ul style="margin: var(--spacing-sm) 0; padding-left: var(--spacing-lg);">
+                                        <li>Kisi stock ka analysis</li>
+                                        <li>Trading strategies</li>
+                                        <li>Risk management tips</li>
+                                        <li>Technical indicators ki explanation</li>
+                                    </ul>
+                                    Kaunsa stock analyze karna hai?
+                                </div>
+                                <div class="message-time" id="welcomeTime"></div>
+                            </div>
+                        </div>
+                        <div class="message ai">
+                            <div class="message-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="typing-indicator" id="typingIndicator">
+                                <span class="typing-dot"></span>
+                                <span class="typing-dot"></span>
+                                <span class="typing-dot"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-area">
+                        <div class="input-wrapper">
+                            <textarea 
+                                id="chatInput" 
+                                class="chat-input" 
+                                placeholder="Type your question... (e.g., Analyze RELIANCE for swing trading)"
+                                rows="2"
+                            ></textarea>
+                            <button class="send-button" id="sendButton" onclick="sendMessage()">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        <div style="margin-top: var(--spacing-sm);">
+                            <label class="form-label" style="font-size: 0.85rem;">API Endpoint:</label>
+                            <input type="text" id="chatApiEndpoint" class="form-input" value="http://localhost:3000/api/ai/chat" style="font-size: 0.85rem;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-sidebar">
+                    <div class="sidebar-card">
+                        <div class="sidebar-title">
+                            <i class="fas fa-bolt"></i>
+                            Quick Actions
+                        </div>
+                        <button class="quick-action-btn" onclick="quickAnalyze('RELIANCE')">
+                            <i class="fas fa-chart-line"></i> Analyze RELIANCE
+                        </button>
+                        <button class="quick-action-btn" onclick="quickAnalyze('TCS')">
+                            <i class="fas fa-chart-line"></i> Analyze TCS
+                        </button>
+                        <button class="quick-action-btn" onclick="quickAnalyze('INFY')">
+                            <i class="fas fa-chart-line"></i> Analyze INFOSYS
+                        </button>
+                        <button class="quick-action-btn" onclick="clearChat()">
+                            <i class="fas fa-trash"></i> Clear Chat
+                        </button>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <div class="sidebar-title">
+                            <i class="fas fa-lightbulb"></i>
+                            Example Questions
+                        </div>
+                        <ul class="example-queries">
+                            <li onclick="askExample('What is RSI and how to use it?')">
+                                What is RSI and how to use it?
+                            </li>
+                            <li onclick="askExample('Explain MACD indicator')">
+                                Explain MACD indicator
+                            </li>
+                            <li onclick="askExample('Difference between swing and intraday trading')">
+                                Swing vs Intraday trading
+                            </li>
+                            <li onclick="askExample('How to set stop loss?')">
+                                How to set stop loss?
+                            </li>
+                            <li onclick="askExample('Risk management tips for beginners')">
+                                Risk management tips
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="sidebar-card" style="background: rgba(251, 191, 36, 0.1); border-color: var(--accent);">
+                        <div style="text-align: center; color: var(--text-secondary); font-size: 0.85rem;">
+                            <i class="fas fa-info-circle" style="color: var(--accent);"></i>
+                            <br>
+                            <strong>AI responses are for educational purposes only.</strong>
+                            Not financial advice.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script src="js/ai-assistant.js"></script>
+    <script src="js/config.js"></script>
+</body>
+</html>

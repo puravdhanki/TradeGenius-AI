@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Charts - TradeGenius AI</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-brand">
+                <span class="logo-icon">📊</span>
+                <span class="logo-text">TradeGenius AI</span>
+            </a>
+            
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="navbar-menu" id="navbarMenu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="charts.html" class="nav-link active">Live Charts</a></li>
+                <li><a href="ai-assistant.html" class="nav-link">AI Assistant</a></li>
+                <li><a href="admin.html" class="nav-link">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="charts-container">
+        <div class="container">
+            <div class="charts-header">
+                <h1>
+                    <i class="fas fa-chart-candlestick"></i> Live Market Charts
+                </h1>
+                <p class="text-secondary" style="margin-top: var(--spacing-sm);">
+                    Real-time TradingView charts with advanced technical analysis
+                </p>
+            </div>
+
+            <!-- Symbol Selector -->
+            <div class="symbol-selector">
+                <h3 class="mb-2"><i class="fas fa-search"></i> Select Stock</h3>
+                <div class="symbol-input-group">
+                    <div class="form-group">
+                        <label class="form-label">Stock Symbol</label>
+                        <input 
+                            type="text" 
+                            id="symbolInput" 
+                            class="form-input" 
+                            placeholder="e.g., NIFTY, RELIANCE, TCS"
+                            value="NIFTY"
+                        >
+                    </div>
+                    <button class="btn btn-primary" onclick="loadChart()">
+                        <i class="fas fa-sync-alt"></i> Load Chart
+                    </button>
+                </div>
+
+                <div class="quick-symbols">
+                    <div style="color: var(--text-secondary); width: 100%; margin-bottom: var(--spacing-xs);">
+                        <strong>Quick Select:</strong>
+                    </div>
+                    <button class="quick-symbol-btn" onclick="quickLoad('NSE:NIFTY')">NIFTY 50</button>
+                    <button class="quick-symbol-btn" onclick="quickLoad('NSE:BANKNIFTY')">BANK NIFTY</button>
+                    <button class="quick-symbol-btn" onclick="quickLoad('NSE:RELIANCE')">RELIANCE</button>
+                    <button class="quick-symbol-btn" onclick="quickLoad('NSE:TCS')">TCS</button>
+                    <button class="quick-symbol-btn" onclick="quickLoad('NSE:INFY')">INFOSYS</button>
+                    <button class="quick-symbol-btn" onclick="quickLoad('NSE:HDFCBANK')">HDFC BANK</button>
+                    <button class="quick-symbol-btn" onclick="quickLoad('NSE:ICICIBANK')">ICICI BANK</button>
+                    <button class="quick-symbol-btn" onclick="quickLoad('NSE:SBIN')">SBI</button>
+                    <button class="quick-symbol-btn" onclick="quickLoad('NSE:ITC')">ITC</button>
+                    <button class="quick-symbol-btn" onclick="quickLoad('NSE:TATASTEEL')">TATA STEEL</button>
+                </div>
+            </div>
+
+            <!-- Chart Controls -->
+            <div class="chart-controls">
+                <h3 class="mb-2"><i class="fas fa-sliders-h"></i> Chart Settings</h3>
+                <div class="control-group">
+                    <div style="width: 100%; color: var(--text-secondary); margin-bottom: var(--spacing-sm);">
+                        <strong>Interval:</strong>
+                    </div>
+                    <button class="control-btn" onclick="changeInterval('1')">1 Min</button>
+                    <button class="control-btn" onclick="changeInterval('5')">5 Min</button>
+                    <button class="control-btn" onclick="changeInterval('15')">15 Min</button>
+                    <button class="control-btn" onclick="changeInterval('60')">1 Hour</button>
+                    <button class="control-btn active" onclick="changeInterval('D')">Daily</button>
+                    <button class="control-btn" onclick="changeInterval('W')">Weekly</button>
+                    <button class="control-btn" onclick="changeInterval('M')">Monthly</button>
+                </div>
+
+                <div class="control-group" style="margin-top: var(--spacing-md);">
+                    <div style="width: 100%; color: var(--text-secondary); margin-bottom: var(--spacing-sm);">
+                        <strong>Chart Type:</strong>
+                    </div>
+                    <button class="control-btn active" onclick="changeChartType('1')">Candles</button>
+                    <button class="control-btn" onclick="changeChartType('0')">Bars</button>
+                    <button class="control-btn" onclick="changeChartType('3')">Line</button>
+                    <button class="control-btn" onclick="changeChartType('8')">Heikin Ashi</button>
+                </div>
+            </div>
+
+            <!-- Chart Wrapper -->
+            <div class="chart-wrapper">
+                <div id="tradingview-chart"></div>
+            </div>
+
+            <!-- Chart Info -->
+            <div class="chart-info">
+                <div class="info-card">
+                    <div class="info-label">
+                        <i class="fas fa-tag"></i> Current Symbol
+                    </div>
+                    <div class="info-value" id="currentSymbol">NIFTY</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">
+                        <i class="fas fa-clock"></i> Interval
+                    </div>
+                    <div class="info-value" id="currentInterval">Daily</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">
+                        <i class="fas fa-chart-bar"></i> Chart Type
+                    </div>
+                    <div class="info-value" id="currentChartType">Candles</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">
+                        <i class="fas fa-globe"></i> Exchange
+                    </div>
+                    <div class="info-value">NSE</div>
+                </div>
+            </div>
+
+            <!-- Disclaimer -->
+            <div class="card" style="background: rgba(251, 191, 36, 0.1); border-color: var(--accent);">
+                <p style="text-align: center; color: var(--text-secondary);">
+                    <i class="fas fa-info-circle" style="color: var(--accent);"></i>
+                    Charts are provided by TradingView. Data may be delayed. For educational purposes only.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://s3.tradingview.com/tv.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/config.js"></script>
+</body>
+</html>

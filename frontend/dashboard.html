@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - TradeGenius AI</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-brand">
+                <span class="logo-icon">📊</span>
+                <span class="logo-text">TradeGenius AI</span>
+            </a>
+            
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="navbar-menu" id="navbarMenu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="dashboard.html" class="nav-link active">Dashboard</a></li>
+                <li><a href="charts.html" class="nav-link">Live Charts</a></li>
+                <li><a href="ai-assistant.html" class="nav-link">AI Assistant</a></li>
+                <li><a href="admin.html" class="nav-link">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="container">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">
+                    <i class="fas fa-chart-line"></i> Trading Dashboard
+                </h1>
+                <p class="dashboard-subtitle">Get AI-powered stock analysis with entry, targets, and risk management</p>
+            </div>
+
+            <!-- API Configuration Notice -->
+            <div id="apiNotice" class="card" style="background: rgba(251, 191, 36, 0.1); border-color: var(--accent); margin-bottom: var(--spacing-xl);">
+                <div style="display: flex; align-items: center; gap: var(--spacing-md);">
+                    <i class="fas fa-cog" style="font-size: 2rem; color: var(--accent);"></i>
+                    <div>
+                        <h3 style="margin-bottom: var(--spacing-xs);">Backend API Required</h3>
+                        <p class="text-secondary" style="margin: 0;">
+                            To use AI analysis, you need to configure the backend API. 
+                            <a href="#" onclick="showApiSetup(); return false;" style="color: var(--primary); text-decoration: underline;">
+                                Click here for setup instructions
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis Form -->
+            <div class="analysis-form">
+                <h3 class="mb-2"><i class="fas fa-brain"></i> Stock Analysis</h3>
+                
+                <div class="form-group">
+                    <label class="form-label">Trading Mode</label>
+                    <div class="toggle-group">
+                        <button class="toggle-btn active" data-mode="SWING" onclick="selectMode('SWING')">
+                            <i class="fas fa-wave-square"></i> Swing Trading
+                        </button>
+                        <button class="toggle-btn" data-mode="INTRADAY" onclick="selectMode('INTRADAY')">
+                            <i class="fas fa-bolt"></i> Intraday Trading
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Stock Symbol / Name</label>
+                        <input type="text" id="stockInput" class="form-input" placeholder="e.g., RELIANCE, TCS, INFY" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Capital (₹)</label>
+                        <input type="number" id="capitalInput" class="form-input" placeholder="100000" value="100000">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Risk % per Trade</label>
+                        <input type="number" id="riskInput" class="form-input" placeholder="2" value="2" min="0.5" max="10" step="0.5">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">API Endpoint URL</label>
+                        <input type="text" id="apiEndpoint" class="form-input" placeholder="http://localhost:3000/api/ai/analyze" value="http://localhost:3000/api/ai/analyze">
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="analyzeStock()" style="width: 100%;">
+                    <i class="fas fa-search"></i> Analyze Stock
+                </button>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section" id="resultsSection">
+                <!-- Stock Header -->
+                <div class="card mb-3">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--spacing-md);">
+                        <div>
+                            <h2 id="stockName" style="margin-bottom: var(--spacing-xs);">--</h2>
+                            <div style="display: flex; gap: var(--spacing-md); align-items: center;">
+                                <span class="badge" id="tradeBadge">--</span>
+                                <span class="badge" id="trendBadge">--</span>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="text-secondary" style="font-size: 0.9rem;">Generated</div>
+                            <div id="timestamp" style="font-family: 'Orbitron', monospace; color: var(--primary);">--</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trade Details Grid -->
+                <div class="trade-details">
+                    <div class="detail-card">
+                        <div class="detail-label">Entry Price</div>
+                        <div class="detail-value" id="entryPrice">--</div>
+                        <div class="detail-subtext">Buy Zone</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-label">Target 1</div>
+                        <div class="detail-value text-success" id="target1">--</div>
+                        <div class="detail-subtext">First Exit</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-label">Target 2</div>
+                        <div class="detail-value text-success" id="target2">--</div>
+                        <div class="detail-subtext">Final Exit</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-label">Stop Loss</div>
+                        <div class="detail-value text-danger" id="stoploss">--</div>
+                        <div class="detail-subtext">Risk Management</div>
+                    </div>
+                </div>
+
+                <!-- Trade Table -->
+                <div class="card">
+                    <table class="trade-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Value</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tradeTableBody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Confidence Meter -->
+                <div class="card confidence-meter">
+                    <div class="meter-label">
+                        <span><i class="fas fa-tachometer-alt"></i> Confidence Level</span>
+                        <span id="confidenceText">--</span>
+                    </div>
+                    <div class="meter-bar">
+                        <div class="meter-fill" id="confidenceFill" style="width: 0%;">
+                            <span id="confidencePercent">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Analysis -->
+                <div class="card">
+                    <h3 class="mb-2"><i class="fas fa-lightbulb"></i> AI Analysis</h3>
+                    <div class="analysis-text" id="analysisText">
+                        --
+                    </div>
+                    <div class="indicator-tags" id="indicatorTags">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Position Calculator -->
+                <div class="card position-calculator">
+                    <h3 class="mb-2"><i class="fas fa-calculator"></i> Position Size Calculator</h3>
+                    <div class="calc-result" id="calcResult">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Disclaimer -->
+                <div class="card" style="background: rgba(251, 191, 36, 0.1); border-color: var(--accent);">
+                    <p style="text-align: center; color: var(--text-secondary);">
+                        <i class="fas fa-exclamation-triangle" style="color: var(--accent);"></i>
+                        <strong>Educational Purpose Only.</strong> Not Financial Advice. Trade at your own risk.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Analyzing stock with AI...</div>
+    </div>
+
+    <!-- API Setup Modal -->
+    <div class="modal" id="apiSetupModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeApiSetup()">&times;</span>
+            <h2><i class="fas fa-cog"></i> API Setup Instructions</h2>
+            <div style="margin-top: var(--spacing-lg);">
+                <h3>Backend Required</h3>
+                <p>This frontend needs a backend API server to function. You have two options:</p>
+                
+                <h4 style="margin-top: var(--spacing-lg);">Option 1: Use the Provided Node.js Backend</h4>
+                <ol>
+                    <li>Navigate to the <code>backend</code> folder</li>
+                    <li>Run <code>npm install</code></li>
+                    <li>Create <code>.env</code> file with your API keys</li>
+                    <li>Run <code>npm start</code></li>
+                    <li>Backend will run on <code>http://localhost:3000</code></li>
+                </ol>
+                
+                <h4 style="margin-top: var(--spacing-lg);">Option 2: Use Your Own API</h4>
+                <p>Set the API endpoint URL in the form above to point to your API.</p>
+                
+                <h4 style="margin-top: var(--spacing-lg);">API Requirements</h4>
+                <p>Your API should accept POST requests with this format:</p>
+                <pre style="background: var(--bg-tertiary); padding: var(--spacing-md); border-radius: var(--radius-md); overflow-x: auto;">
+{
+  "stockName": "RELIANCE",
+  "tradeMode": "SWING",
+  "capital": 100000,
+  "riskPercentage": 2
+}</pre>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/config.js"></script>
+</body>
+</html>

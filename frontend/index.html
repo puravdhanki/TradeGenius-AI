@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeGenius AI - AI-Powered Stock Trading</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-brand">
+                <span class="logo-icon">📊</span>
+                <span class="logo-text">TradeGenius AI</span>
+            </a>
+            
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="navbar-menu" id="navbarMenu">
+                <li><a href="index.html" class="nav-link active">Home</a></li>
+                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="charts.html" class="nav-link">Live Charts</a></li>
+                <li><a href="ai-assistant.html" class="nav-link">AI Assistant</a></li>
+                <li><a href="admin.html" class="nav-link">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">AI-Powered Stock Trading Intelligence</h1>
+                <p class="hero-subtitle">
+                    Get real-time trading signals, technical analysis, and AI-driven insights for Swing & Intraday trading. 
+                    Make smarter decisions with TradeGenius AI.
+                </p>
+                <div class="hero-cta">
+                    <a href="dashboard.html" class="btn btn-primary">
+                        <i class="fas fa-rocket"></i> Start Analyzing
+                    </a>
+                    <a href="ai-assistant.html" class="btn btn-outline">
+                        <i class="fas fa-robot"></i> AI Assistant
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <i class="fas fa-chart-line"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">Powerful Features</h2>
+            <div class="grid grid-3">
+                <div class="card feature-card animate-fade-in">
+                    <i class="fas fa-brain feature-icon"></i>
+                    <h3 class="feature-title">AI Analysis</h3>
+                    <p class="feature-description">
+                        Advanced AI algorithms analyze market data using RSI, MACD, EMA, VWAP, and more to provide accurate trading signals.
+                    </p>
+                </div>
+                <div class="card feature-card animate-fade-in" style="animation-delay: 0.1s;">
+                    <i class="fas fa-chart-candlestick feature-icon"></i>
+                    <h3 class="feature-title">Live Charts</h3>
+                    <p class="feature-description">
+                        Real-time TradingView charts with advanced technical indicators for comprehensive market analysis.
+                    </p>
+                </div>
+                <div class="card feature-card animate-fade-in" style="animation-delay: 0.2s;">
+                    <i class="fas fa-calculator feature-icon"></i>
+                    <h3 class="feature-title">Risk Calculator</h3>
+                    <p class="feature-description">
+                        Calculate position sizes, risk-reward ratios, and potential returns based on your capital and risk tolerance.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trading Modes -->
+    <section class="trading-modes">
+        <div class="container">
+            <h2 class="section-title">Trading Modes</h2>
+            <div class="grid grid-2">
+                <div class="card mode-card">
+                    <span class="badge badge-success mode-badge">Popular</span>
+                    <i class="fas fa-wave-square mode-icon" style="color: var(--primary);"></i>
+                    <h3 class="mode-title">Swing Trading</h3>
+                    <p class="text-secondary">Hold positions for days to weeks, capturing medium-term trends</p>
+                    <ul class="mode-list">
+                        <li>Daily & Weekly Analysis</li>
+                        <li>Support & Resistance Levels</li>
+                        <li>Trend Following Strategies</li>
+                        <li>Multi-day Position Management</li>
+                    </ul>
+                </div>
+                <div class="card mode-card">
+                    <span class="badge badge-info mode-badge">Fast</span>
+                    <i class="fas fa-bolt mode-icon" style="color: var(--accent);"></i>
+                    <h3 class="mode-title">Intraday Trading</h3>
+                    <p class="text-secondary">Quick trades within the same day, capturing short-term movements</p>
+                    <ul class="mode-list">
+                        <li>Real-time Price Action</li>
+                        <li>VWAP & Moving Averages</li>
+                        <li>Momentum Indicators</li>
+                        <li>Same-day Entry/Exit</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Chart Preview -->
+    <section class="chart-preview">
+        <div class="container">
+            <h2 class="section-title">Live Market Charts</h2>
+            <div class="chart-container">
+                <div class="tradingview-widget-container" style="height: 100%; width: 100%;">
+                    <div id="tradingview_widget" style="height: 400px;"></div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <a href="charts.html" class="btn btn-primary">View Full Charts</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Sentiment -->
+    <section class="sentiment-section">
+        <div class="container">
+            <h2 class="section-title">Market Sentiment</h2>
+            <div class="sentiment-grid">
+                <div class="card sentiment-card">
+                    <div class="sentiment-label">NIFTY 50</div>
+                    <div class="sentiment-value text-success" id="nifty-value">21,456</div>
+                    <div class="badge badge-success" id="nifty-change">+0.85%</div>
+                </div>
+                <div class="card sentiment-card">
+                    <div class="sentiment-label">BANK NIFTY</div>
+                    <div class="sentiment-value text-success" id="banknifty-value">46,234</div>
+                    <div class="badge badge-success" id="banknifty-change">+1.12%</div>
+                </div>
+                <div class="card sentiment-card">
+                    <div class="sentiment-label">SENSEX</div>
+                    <div class="sentiment-value text-success" id="sensex-value">71,123</div>
+                    <div class="badge badge-success" id="sensex-change">+0.67%</div>
+                </div>
+                <div class="card sentiment-card">
+                    <div class="sentiment-label">INDIA VIX</div>
+                    <div class="sentiment-value text-warning" id="vix-value">14.23</div>
+                    <div class="badge badge-warning" id="vix-status">Moderate</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <section class="container">
+        <div class="disclaimer">
+            <i class="fas fa-exclamation-triangle disclaimer-icon"></i>
+            <h3>⚠️ Important Disclaimer</h3>
+            <p style="margin-top: var(--spacing-md); color: var(--text-secondary);">
+                TradeGenius AI provides <strong>educational analysis only</strong>. This is <strong>NOT financial advice</strong>. 
+                Stock trading involves substantial risk. Past performance does not guarantee future results. 
+                Always do your own research and consult with a qualified financial advisor before making any investment decisions.
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 TradeGenius AI. All rights reserved.</p>
+            <p class="text-secondary" style="margin-top: var(--spacing-sm);">
+                Built with <i class="fas fa-heart text-danger"></i> for Indian Stock Market Traders
+            </p>
+        </div>
+    </footer>
+
+    <!-- TradingView Widget Script -->
+    <script src="https://s3.tradingview.com/tv.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/config.js"></script>
+    <script>
+        // Initialize TradingView Widget
+        new TradingView.widget({
+            "width": "100%",
+            "height": 400,
+            "symbol": "NSE:NIFTY",
+            "interval": "D",
+            "timezone": "Asia/Kolkata",
+            "theme": "dark",
+            "style": "1",
+            "locale": "in",
+            "toolbar_bg": "#0a0e27",
+            "enable_publishing": false,
+            "hide_side_toolbar": false,
+            "allow_symbol_change": true,
+            "container_id": "tradingview_widget"
+        });
+    </script>
+</body>
+</html>
